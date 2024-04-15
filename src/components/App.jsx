@@ -1,44 +1,36 @@
-import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
+import { useEffect } from 'react';
+import { nanoid } from '@reduxjs/toolkit';
+import { useSelector, useDispatch } from 'react-redux';
 import { Title } from './Title/Title';
 import { ContactsList } from './ContactList/ContactsList';
 import { SearchBox } from './SearchBox/SearchBox';
 import { ContactForm } from './ContactForm/ContactForm';
-
-import { getContactsList } from '../auxiliary/localstorage/getContactsList';
-import { saveContactsList } from '../auxiliary/localstorage/saveContactsList';
+import { addContact, deleteContact } from '../redux/contactsSlice';
+import { changeFilter } from '../redux/filtersSlice';
 
 import { SEARCH_LABEL, TITLE } from '../auxiliary/constants';
-
 import styles from './App.module.css';
 
 const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    const savedContacts = getContactsList();
-    return savedContacts ? savedContacts : [];
-  });
-  const [filter, setFilter] = useState('');
+  const contacts = useSelector(state => state.contacts.items);
+  const filter = useSelector(state => state.filters.name);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    // You can dispatch an action here to fetch contacts from an API if needed
+  }, []);
 
   const handleAddContact = newContact => {
-    setContacts(prevContacts => [
-      ...prevContacts,
-      { ...newContact, id: nanoid() },
-    ]);
+    dispatch(addContact({ ...newContact, id: nanoid() }));
   };
 
   const handleDeleteContact = id => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== id)
-    );
+    dispatch(deleteContact(id));
   };
 
   const handleChangeSearch = event => {
-    setFilter(event.target.value);
+    dispatch(changeFilter(event.target.value));
   };
-
-  useEffect(() => {
-    saveContactsList(contacts);
-  }, [contacts]);
 
   const filteredContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(filter.toLowerCase())
@@ -59,4 +51,4 @@ const App = () => {
   );
 };
 
-export default App
+export default App;
