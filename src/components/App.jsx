@@ -16,9 +16,8 @@ const App = () => {
   const filter = useSelector(state => state.filters.name);
   const dispatch = useDispatch();
   
-  useEffect(() => {
-    // You can dispatch an action here to fetch contacts from an API if needed
-  }, []);
+  // useEffect(() => {
+  // }, []);
 
   const handleAddContact = newContact => {
     dispatch(addContact({ ...newContact, id: nanoid() }));

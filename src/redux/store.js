@@ -25,6 +25,6 @@ export const store = configureStore({
     }),
 });
 
-export const persistor = persistStore(store); // Export persistor
+export const persistor = persistStore(store); 
 
-export default store; // Export store as default
+export default store;
